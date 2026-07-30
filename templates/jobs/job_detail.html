@@ -1,0 +1,39 @@
+{% extends 'base.html' %}{% block title %}{{ job.title }} · CareerBridge{% endblock %}
+{% block content %}
+<div style="max-width:800px;margin:0 auto;padding:32px 20px;">
+  <a href="{% url 'job_list' %}" style="font-size:13px;color:var(--accent);text-decoration:none;display:inline-block;margin-bottom:20px;">← Back to jobs</a>
+  <div class="card" style="margin-bottom:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px;flex-wrap:wrap;">
+      <div>
+        <span class="badge b-blue" style="margin-bottom:10px;">{{ job.get_job_type_display }}</span>
+        <h1 class="t-page-title" style="margin:6px 0;">{{ job.title }}</h1>
+        <p style="font-size:14px;color:var(--accent);font-weight:600;margin:0 0 4px;">{{ job.employer.company_name }}</p>
+        {% if job.location %}<p class="t-body">{% include "icons/pin.html" with size=13 %} {{ job.location }}</p>{% endif %}
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <p class="t-meta" style="margin-bottom:4px;">Application Deadline</p>
+        <p style="font-size:15px;font-weight:700;color:var(--text);margin:0;">{{ job.deadline }}</p>
+      </div>
+    </div>
+    <hr class="divider">
+    <h3 class="t-eyebrow" style="margin-bottom:10px;">Job Description</h3>
+    <p style="font-size:14px;color:var(--text-secondary);line-height:1.8;margin:0 0 24px;white-space:pre-line;">{{ job.description }}</p>
+    <h3 class="t-eyebrow" style="margin-bottom:10px;">Required Skills</h3>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+      {% for skill in job.skills_list %}<span class="badge b-blue" style="font-size:12px;padding:5px 12px;">{{ skill }}</span>{% endfor %}
+    </div>
+    <hr class="divider">
+    {% if user.is_authenticated and user.is_student %}
+      {% if already_applied %}
+        <div class="alert alert-success">You have already applied for this position. <a href="{% url 'my_applications' %}" style="color:var(--success);font-weight:700;">Track your application →</a></div>
+      {% elif job.status == 'open' %}
+        <a href="{% url 'apply_job' job.pk %}" class="btn btn-primary">Apply Now →</a>
+      {% else %}
+        <p class="t-body">This position is no longer accepting applications.</p>
+      {% endif %}
+    {% elif not user.is_authenticated %}
+      <p class="t-body">Please <a href="{% url 'login' %}" style="color:var(--accent);font-weight:600;text-decoration:none;">log in</a> or <a href="{% url 'register_student' %}" style="color:var(--accent);font-weight:600;text-decoration:none;">create a student account</a> to apply.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

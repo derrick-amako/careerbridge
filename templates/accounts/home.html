@@ -1,0 +1,49 @@
+{% extends 'base.html' %}{% block title %}CareerBridge · Student Placement Portal{% endblock %}
+{% block content %}
+<section style="background:var(--surface);border-bottom:1px solid var(--border);padding:64px 20px;">
+  <div style="max-width:1200px;margin:0 auto;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:var(--surface-alt);border:1px solid var(--border);border-radius:4px;padding:5px 12px;margin-bottom:20px;font-size:12px;font-weight:600;color:var(--text-secondary);">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--success);display:inline-block;"></span>Chrisland University · Abeokuta, Nigeria
+    </div>
+    <h1 style="font-size:40px;font-weight:800;line-height:1.2;margin:0 0 16px;color:var(--text);letter-spacing:-0.02em;max-width:680px;">Land your next internship with AI-assisted matching</h1>
+    <p style="font-size:15px;color:var(--text-secondary);line-height:1.7;margin:0 0 28px;max-width:480px;">CareerBridge connects Chrisland students with verified employers using machine learning. No more WhatsApp groups and notice boards.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <a href="{% url 'register_student' %}" class="btn btn-primary">I'm a Student</a>
+      <a href="{% url 'register_employer' %}" class="btn btn-secondary">I'm an Employer</a>
+    </div>
+    <div style="display:flex;gap:28px;margin-top:36px;flex-wrap:wrap;">
+      <div><p style="font-size:22px;font-weight:700;color:var(--text);margin:0;">500+</p><p class="t-meta">Students</p></div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div><p style="font-size:22px;font-weight:700;color:var(--text);margin:0;">120+</p><p class="t-meta">Employers</p></div>
+      <div style="width:1px;background:var(--border);"></div>
+      <div><p style="font-size:22px;font-weight:700;color:var(--text);margin:0;">85%</p><p class="t-meta">Placement Rate</p></div>
+    </div>
+  </div>
+</section>
+<section style="max-width:1200px;margin:0 auto;padding:56px 20px;">
+  <p class="t-eyebrow" style="text-align:center;margin-bottom:8px;">Get Started</p>
+  <h2 style="font-size:24px;font-weight:700;color:var(--text);text-align:center;margin:0 0 32px;">How It Works</h2>
+  <div class="job-card-grid">
+    <div class="card">
+      <div style="width:36px;height:36px;border-radius:6px;background:var(--accent-solid);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:white;margin-bottom:14px;">1</div>
+      <h3 style="font-size:14px;font-weight:700;color:var(--text);margin:0 0 6px;">Create your profile</h3>
+      <p class="t-body">Add skills, department, CV</p>
+    </div>
+    <div class="card">
+      <div style="width:36px;height:36px;border-radius:6px;background:var(--accent-solid);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:white;margin-bottom:14px;">2</div>
+      <h3 style="font-size:14px;font-weight:700;color:var(--text);margin:0 0 6px;">Get AI recommendations</h3>
+      <p class="t-body">ML matches you to roles</p>
+    </div>
+    <div class="card">
+      <div style="width:36px;height:36px;border-radius:6px;background:var(--accent-solid);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:white;margin-bottom:14px;">3</div>
+      <h3 style="font-size:14px;font-weight:700;color:var(--text);margin:0 0 6px;">Apply and track</h3>
+      <p class="t-body">Real-time status updates</p>
+    </div>
+  </div>
+</section>
+<section style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 20px;text-align:center;">
+  <h2 style="font-size:22px;font-weight:700;color:var(--text);margin:0 0 10px;">Ready to launch your career?</h2>
+  <p class="t-body" style="margin-bottom:24px;">Join hundreds of Chrisland students already finding opportunities.</p>
+  <a href="{% url 'register_choice' %}" class="btn btn-primary">Create Free Account</a>
+</section>
+{% endblock %}

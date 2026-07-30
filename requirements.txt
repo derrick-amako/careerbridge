@@ -1,0 +1,14 @@
+Django==6.0.5
+asgiref>=3.11,<4
+sqlparse>=0.5,<0.6
+tzdata>=2026.1
+pillow>=12,<13
+scikit-learn>=1.7,<2
+numpy>=2.2,<3
+scipy>=1.15,<2
+joblib>=1.4,<2
+threadpoolctl>=3.5,<4
+gunicorn==23.0.0
+whitenoise==6.9.0
+dj-database-url==2.3.0
+psycopg[binary]>=3.2.10

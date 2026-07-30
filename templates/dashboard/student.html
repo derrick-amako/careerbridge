@@ -1,0 +1,97 @@
+{% extends 'base.html' %}{% block title %}Dashboard · CareerBridge{% endblock %}
+{% block content %}
+<div style="max-width:1200px;margin:0 auto;padding:32px 20px;">
+  <div style="margin-bottom:24px;">
+    <h1 class="t-page-title">Welcome back, {{ user.first_name }}</h1>
+    <p class="t-body" style="margin-top:4px;">{{ user.student_profile.department }} · {{ user.student_profile.get_level_display }}</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stat-grid-4" style="margin-bottom:24px;">
+    <div class="stat-card">
+      <div style="width:40px;height:40px;border-radius:6px;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">{% include "icons/clipboard.html" with size=20 %}</div>
+      <div style="display:flex;flex-direction:column;justify-content:center;"><p style="font-size:30px;font-weight:800;color:var(--text);margin:0;line-height:1.1;">{{ stats.total_apps }}</p><p class="t-meta">Applications</p></div>
+    </div>
+    <div class="stat-card">
+      <div style="width:40px;height:40px;border-radius:6px;background:var(--success-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">{% include "icons/check.html" with size=20 %}</div>
+      <div style="display:flex;flex-direction:column;justify-content:center;"><p style="font-size:30px;font-weight:800;color:var(--text);margin:0;line-height:1.1;">{{ stats.shortlisted }}</p><p class="t-meta">Shortlisted</p></div>
+    </div>
+    <div class="stat-card">
+      <div style="width:40px;height:40px;border-radius:6px;background:var(--warning-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">{% include "icons/briefcase.html" with size=20 %}</div>
+      <div style="display:flex;flex-direction:column;justify-content:center;"><p style="font-size:30px;font-weight:800;color:var(--text);margin:0;line-height:1.1;">{{ stats.open_jobs }}</p><p class="t-meta">Open Jobs</p></div>
+    </div>
+    <div class="stat-card">
+      <div style="width:40px;height:40px;border-radius:6px;background:var(--purple-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">{% include "icons/robot.html" with size=20 %}</div>
+      <div style="display:flex;flex-direction:column;justify-content:center;"><p style="font-size:30px;font-weight:800;color:var(--text);margin:0;line-height:1.1;">{{ stats.recommendations }}</p><p class="t-meta">AI Matches</p></div>
+    </div>
+  </div>
+
+  <!-- Main grid -->
+  <div class="two-col-grid" style="margin-bottom:24px;">
+
+    <!-- AI Recommendations -->
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border);">
+        <h2 class="t-section-title">AI Recommendations</h2>
+        <a href="{% url 'my_recommendations' %}" class="link-pill">View all →</a>
+      </div>
+      <div style="padding:8px 18px;">
+        {% if not eligible %}
+        <p class="t-body" style="text-align:center;padding:20px 0;">{% include "icons/lock.html" with size=13 %} Internship applications open once you reach 300 level.</p>
+        {% else %}
+        {% for rec in recommendations %}
+        <div class="list-row" style="padding:18px 10px;border-bottom:1px solid var(--border-subtle);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div style="flex:1;">
+              <a href="{% url 'job_detail' rec.job.pk %}" style="font-size:13px;font-weight:600;color:var(--text);text-decoration:none;">{{ rec.job.title|title }}</a>
+              <p style="font-size:12px;color:var(--text-secondary);margin:4px 0 0;">{{ rec.job.employer.company_name }} · {{ rec.job.get_job_type_display }}</p>
+            </div>
+            <span class="badge b-match" style="white-space:nowrap;">Match Score: {{ rec.match_score|floatformat:0 }}</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;">
+            {% for skill in rec.job.skills_list|slice:":3" %}<span class="skill-chip">{{ skill }}</span>{% endfor %}
+          </div>
+        </div>
+        {% empty %}
+        <p class="t-body" style="text-align:center;padding:20px 0;">
+          No matches yet. <a href="{% url 'profile' %}" style="color:var(--accent);text-decoration:none;">Update your profile</a>
+        </p>
+        {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Recent Applications -->
+    <div class="card" style="padding:0;overflow:hidden;">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border);">
+        <h2 class="t-section-title">Recent Applications</h2>
+        <a href="{% url 'my_applications' %}" class="link-pill">View all →</a>
+      </div>
+      <div style="padding:8px 18px;">
+        {% for app in applications %}
+        <div class="list-row" style="padding:18px 10px;border-bottom:1px solid var(--border-subtle);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div>
+              <p style="font-size:13px;font-weight:600;color:var(--text);margin:0;">{{ app.job.title|title }}</p>
+              <p style="font-size:12px;color:var(--text-secondary);margin:4px 0 0;">{{ app.job.employer.company_name }}</p>
+            </div>
+            <span class="badge
+              {% if app.status == 'submitted' %}b-slate
+              {% elif app.status == 'under_review' %}b-yellow
+              {% elif app.status == 'shortlisted' %}b-green
+              {% elif app.status == 'accepted' %}b-emerald
+              {% else %}b-red{% endif %}">
+              {{ app.get_status_display }}
+            </span>
+          </div>
+        </div>
+        {% empty %}
+        <p class="t-body" style="text-align:center;padding:20px 0;">
+          No applications yet. <a href="{% url 'job_list' %}" style="color:var(--accent);text-decoration:none;">Browse jobs</a>
+        </p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

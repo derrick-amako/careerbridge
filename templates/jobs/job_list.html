@@ -1,0 +1,44 @@
+{% extends 'base.html' %}{% block title %}Browse Jobs · CareerBridge{% endblock %}
+{% block content %}
+<div style="max-width:1200px;margin:0 auto;padding:32px 20px;">
+  <h1 class="t-page-title" style="margin-bottom:20px;">Browse Opportunities</h1>
+  <form method="get" style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+    <input name="q" type="text" value="{{ query }}" placeholder="Search by title or skill..." class="inp" style="flex:1;min-width:240px;">
+    <select name="type" class="inp" style="width:180px;">
+      <option value="">All Types</option>
+      <option value="internship" {% if job_type == "internship" %}selected{% endif %}>Internship</option>
+      <option value="part_time" {% if job_type == "part_time" %}selected{% endif %}>Part-Time</option>
+      <option value="full_time" {% if job_type == "full_time" %}selected{% endif %}>Full-Time</option>
+      <option value="remote" {% if job_type == "remote" %}selected{% endif %}>Remote</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Search</button>
+    {% if query or job_type %}<a href="{% url 'job_list' %}" class="btn btn-secondary">Clear</a>{% endif %}
+  </form>
+  <p class="t-meta" style="margin-bottom:16px;">{{ jobs.count }} opportunit{{ jobs.count|pluralize:"y,ies" }} found</p>
+  {% if jobs %}
+  <div class="job-card-grid">
+    {% for job in jobs %}
+    <div class="card card-glow" style="display:flex;flex-direction:column;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span class="badge b-blue">{{ job.get_job_type_display }}</span>
+        <span class="t-meta">{{ job.created_at|date:"d M Y" }}</span>
+      </div>
+      <h3 style="font-size:14px;font-weight:700;color:var(--text);margin:0 0 4px;">{{ job.title }}</h3>
+      <p style="font-size:13px;color:var(--accent);font-weight:600;margin:0 0 2px;">{{ job.employer.company_name }}</p>
+      {% if job.location %}<p class="t-meta" style="margin:0 0 10px;">{% include "icons/pin.html" with size=12 %} {{ job.location }}</p>{% endif %}
+      <p class="t-body" style="margin:0 0 12px;flex:1;">{{ job.description|truncatewords:18 }}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;">
+        {% for skill in job.skills_list|slice:":4" %}<span class="skill-chip">{{ skill }}</span>{% endfor %}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border-subtle);margin-top:auto;">
+        <span class="t-meta">Deadline: {{ job.deadline }}</span>
+        <a href="{% url 'job_detail' job.pk %}" style="font-size:12px;font-weight:700;color:var(--accent);text-decoration:none;">View & Apply →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align:center;padding:80px 20px;"><p style="font-size:16px;color:var(--text-muted);margin-bottom:8px;">No jobs found.</p><a href="{% url 'job_list' %}" style="font-size:13px;color:var(--accent);text-decoration:none;">View all jobs</a></div>
+  {% endif %}
+</div>
+{% endblock %}

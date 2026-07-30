@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}CareerBridge · Chrisland University{% endblock %}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --surface: #171b21;
+    --surface-alt: #1a1d23;
+    --surface-raised: #1c1f26;
+    --border: #2b2f38;
+    --border-subtle: #20232a;
+    --text: #e8eaed;
+    --text-secondary: #9aa0ab;
+    --text-muted: #6b7280;
+    --text-faint: #454a52;
+    --accent: #5b8def;
+    --accent-solid: #3258c4;
+    --accent-solid-hover: #2a49a3;
+    --accent-tint: rgba(91,141,239,0.14);
+    --accent-border: rgba(91,141,239,0.35);
+    --success: #4caf6d;
+    --success-tint: rgba(76,175,109,0.14);
+    --success-border: rgba(76,175,109,0.35);
+    --warning: #c98a3a;
+    --warning-tint: rgba(201,138,58,0.16);
+    --warning-border: rgba(201,138,58,0.4);
+    --danger: #e0645f;
+    --danger-tint: rgba(224,100,95,0.14);
+    --danger-border: rgba(224,100,95,0.4);
+    --purple: #9083d8;
+    --purple-tint: rgba(144,131,216,0.14);
+    --purple-border: rgba(144,131,216,0.35);
+    --teal: #4aa8a2;
+    --teal-tint: rgba(74,168,162,0.14);
+    --neutral: #9aa0ab;
+    --neutral-tint: rgba(154,160,171,0.12);
+    --neutral-border: rgba(154,160,171,0.3);
+    --match: #8b93f6;
+    --match-tint: rgba(139,147,246,0.14);
+    --match-border: rgba(139,147,246,0.4);
+    --slate: #93a4c2;
+    --slate-tint: rgba(147,164,194,0.14);
+    --card-border: rgba(255,255,255,0.09);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; min-height: 100vh; font-size: 14px; line-height: 1.5; overflow-x: hidden; display: flex; flex-direction: column; }
+  main { flex: 1 0 auto; }
+  a { color: var(--accent); }
+
+  /* ── TYPE SCALE ── */
+  .t-page-title { font-size: 20px; font-weight: 700; color: var(--text); margin: 0; letter-spacing: -0.01em; }
+  .t-section-title { font-size: 13px; font-weight: 600; color: var(--text); margin: 0; }
+  .t-eyebrow { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin: 0; }
+  .t-body { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+  .t-meta { font-size: 12px; color: var(--text-muted); margin: 0; }
+
+  /* ── FORM FIELDS ── */
+  .inp {
+    width: 100%; background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px; padding: 9px 12px;
+    font-size: 13px; color: var(--text);
+    transition: border-color 0.1s; outline: none; display: block;
+  }
+  .inp::placeholder { color: var(--text-faint); }
+  .inp:focus { border-color: var(--accent); }
+  select.inp option { background: var(--surface); }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .card-glow { transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s; cursor: pointer; }
+  .card-glow:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.35); }
+
+  /* ── PILL LINK (e.g. "View all →") ── */
+  .link-pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--accent-tint); color: var(--accent);
+    font-size: 12px; font-weight: 600; padding: 5px 12px;
+    border-radius: 999px; border: 1px solid var(--accent-border);
+    text-decoration: none; transition: background-color 0.15s, color 0.15s;
+  }
+  .link-pill:hover { background: var(--accent-solid); color: #ffffff; }
+
+  /* ── INTERACTIVE LIST ROW (dashboard mini-lists) ── */
+  .list-row { transition: background-color 0.15s; border-radius: 6px; }
+  .list-row:hover { background: var(--surface-alt); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block; font-weight: 600; padding: 8px 16px;
+    border-radius: 6px; font-size: 13px; cursor: pointer;
+    border: 1px solid transparent; text-decoration: none; transition: background-color 0.1s, border-color 0.1s;
+  }
+  .btn-primary { background: var(--accent-solid); color: #ffffff; border-color: var(--accent-solid); }
+  .btn-primary:hover { background: var(--accent-solid-hover); border-color: var(--accent-solid-hover); }
+  .btn-secondary { background: transparent; color: var(--text-secondary); border-color: var(--border); }
+  .btn-secondary:hover { background: var(--surface-alt); border-color: var(--text-muted); color: var(--text); }
+  .btn-danger { background: var(--danger-tint); color: var(--danger); border: 1px solid var(--danger-border); font-size: 12px; padding: 6px 12px; border-radius: 6px; }
+  .btn-danger:hover { background: rgba(224,100,95,0.22); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+  /* ── BADGES ── */
+  .badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 700; border: 1px solid transparent; }
+  .b-blue { background: #60a5fa; color: #0b2140; }
+  .b-green { background: #4ade80; color: #052e16; }
+  .b-yellow { background: #fbbf24; color: #452b00; }
+  .b-red { background: #f87171; color: #450a0a; }
+  .b-purple { background: #c4b5fd; color: #2e1065; }
+  .b-gray { background: #cbd5e1; color: #1e293b; }
+  .b-emerald { background: #4ade80; color: #052e16; }
+  .b-slate { background: #93a4c2; color: #1a2436; }
+  .b-match { background: linear-gradient(135deg, #60a5fa, #a78bfa); color: #1e1b3d; }
+  .skill-chip { background: #4b5563; color: #f3f4f6; border: 1px solid #5b6473; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+  .skill-chip-matched { background: #4ade80; color: #052e16; border: 1px solid #4ade80; padding: 3px 9px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .skill-chip-missing { background: transparent; color: var(--text-secondary); border: 1px dashed var(--border); padding: 3px 9px; border-radius: 4px; font-size: 11px; }
+
+  /* ── NAV ── */
+  .navbar { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top:0; z-index:50; }
+
+  /* ── STAT CARD ── */
+  .stat-card { border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 14px; border: 1px solid var(--card-border); background: var(--surface); }
+
+  /* ── TABLE ── */
+  .dark-table { width: 100%; border-collapse: collapse; }
+  .dark-table thead tr { background: var(--surface-alt); border-bottom: 1px solid var(--border); }
+  .dark-table th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .dark-table tbody tr { border-bottom: 1px solid var(--border-subtle); }
+  .dark-table tbody tr:hover { background: var(--surface-alt); }
+  .dark-table td { padding: 11px 16px; font-size: 13px; color: var(--text); }
+
+  /* ── ALERTS ── */
+  .alert { padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 8px; border: 1px solid transparent; }
+  .alert-success { background: var(--success-tint); border-color: var(--success-border); color: var(--success); }
+  .alert-error { background: var(--danger-tint); border-color: var(--danger-border); color: var(--danger); }
+  .alert-info { background: var(--accent-tint); border-color: var(--accent-border); color: var(--accent); }
+  .alert-warning { background: var(--warning-tint); border-color: var(--warning-border); color: var(--warning); }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* ── PROGRESS ── */
+  .progress-track { height: 6px; background: var(--surface-alt); border: 1px solid var(--border-subtle); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); }
+
+  /* ── STATUS TIMELINE ── */
+  .tl-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); flex-shrink: 0; margin-top: 4px; border: 2px solid var(--bg); }
+  .tl-dot-active { background: var(--accent); }
+  .tl-dot-rejected { background: var(--danger); }
+  .tl-line { width: 1px; flex: 1; background: var(--border); min-height: 20px; }
+
+  /* ── FORM LABEL ── */
+  .label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 5px; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ── RESPONSIVE GRIDS (dashboards) ── */
+  .stat-grid-4, .stat-grid-6 { display: grid; gap: 12px; }
+  .stat-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .stat-grid-6 { grid-template-columns: repeat(6, 1fr); }
+  .two-col-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .job-card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+  /* ── TABLE SCROLL WRAPPER (contains overflow to the table, not the page) ── */
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-scroll .dark-table { min-width: 600px; }
+
+  /* ── MOBILE NAV ── */
+  .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; align-items: center; justify-content: center; }
+  /* Desktop default for #nav-links lives here (not inline on the element) so the
+     media query below can actually override display without an inline style
+     (which always wins the cascade regardless of specificity) fighting it. */
+  .nav-links { display: flex; align-items: center; gap: 20px; }
+
+  @media (max-width: 768px) {
+    .nav-hamburger { display: flex; }
+    .nav-links {
+      display: none;
+      position: fixed; top: 56px; left: 0; right: 0;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      flex-direction: column; align-items: stretch; gap: 0;
+      padding: 8px 20px 14px; z-index: 200;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 12px 0; border-bottom: 1px solid var(--border-subtle); width: 100%; }
+    .nav-links a.btn { width: fit-content; border-bottom: none; padding: 8px 16px; margin-top: 10px; }
+    .nav-links .nav-user-menu-wrap { padding-left: 0; border-left: none; border-top: 1px solid var(--border); margin-top: 8px; padding-top: 10px; width: 100%; }
+  }
+
+  /* ── FOOTER ── */
+  .footer-row { display: flex; justify-content: space-between; align-items: center; }
+
+  @media (max-width: 640px) {
+    .stat-grid-4, .stat-grid-6 { grid-template-columns: repeat(2, 1fr); }
+    .two-col-grid { grid-template-columns: 1fr; }
+    .job-card-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 340px) {
+    .stat-grid-4, .stat-grid-6 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div style="max-width:1200px;margin:0 auto;padding:0 20px;display:flex;justify-content:space-between;align-items:center;height:56px;">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <div style="width:30px;height:30px;border-radius:6px;background:var(--accent-solid);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="16" height="16" fill="none" stroke="white" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:14px;color:var(--text);line-height:1.2;">CareerBridge</div>
+        <div style="font-size:10px;color:var(--text-muted);line-height:1.2;">Chrisland University</div>
+      </div>
+    </a>
+    <button id="nav-hamburger-btn" type="button" class="nav-hamburger" aria-label="Menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="var(--text-secondary)" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div id="nav-links" class="nav-links">
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}" style="color:var(--text-secondary);font-size:13px;font-weight:500;text-decoration:none;">Dashboard</a>
+        <a href="{% url 'job_list' %}" style="color:var(--text-secondary);font-size:13px;font-weight:500;text-decoration:none;">Browse Jobs</a>
+        {% if user.is_student %}<a href="{% url 'my_applications' %}" style="color:var(--text-secondary);font-size:13px;font-weight:500;text-decoration:none;">Applications</a>
+        <a href="{% url 'my_recommendations' %}" style="color:var(--text-secondary);font-size:13px;font-weight:500;text-decoration:none;">AI Matches</a>{% endif %}
+        {% if user.is_employer %}<a href="{% url 'post_job' %}" style="color:var(--text-secondary);font-size:13px;font-weight:500;text-decoration:none;">Post Job</a>{% endif %}
+        <div class="nav-user-menu-wrap" style="position:relative;padding-left:16px;border-left:1px solid var(--border);">
+          <button id="user-menu-btn" type="button" style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:4px;">
+            {% if user.profile_picture %}
+              <img src="{{ user.profile_picture.url }}" alt="" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--border);flex-shrink:0;">
+            {% else %}
+              <div style="width:28px;height:28px;border-radius:50%;background:var(--accent-tint);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);flex-shrink:0;">{{ user.first_name|first }}{{ user.last_name|first }}</div>
+            {% endif %}
+            <span style="font-size:13px;color:var(--text-secondary);">{{ user.first_name }}</span>
+            <svg width="12" height="12" fill="none" stroke="var(--text-muted)" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="user-menu" style="display:none;position:absolute;right:0;top:calc(100% + 6px);background:var(--surface-raised);border:1px solid var(--border);border-radius:6px;min-width:150px;overflow:hidden;z-index:100;">
+            <a href="{% url 'profile' %}" style="display:block;padding:9px 14px;font-size:13px;color:var(--text-secondary);font-weight:500;text-decoration:none;">Edit Profile</a>
+            <a href="{% url 'logout' %}" style="display:block;padding:9px 14px;font-size:13px;color:var(--danger);font-weight:500;text-decoration:none;border-top:1px solid var(--border);">Logout</a>
+          </div>
+        </div>
+      {% else %}
+        <a href="{% url 'job_list' %}" style="color:var(--text-secondary);font-size:13px;font-weight:500;text-decoration:none;">Browse Jobs</a>
+        <a href="{% url 'login' %}" style="color:var(--text-secondary);font-size:13px;font-weight:500;text-decoration:none;">Login</a>
+        <a href="{% url 'register_choice' %}" class="btn btn-primary btn-sm">Get Started</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+{% if messages %}
+<div style="max-width:1200px;margin:16px auto 0;padding:0 20px;">
+  {% for message in messages %}
+  <div class="alert {% if message.tags == 'error' %}alert-error{% elif message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %}">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<main>{% block content %}{% endblock %}</main>
+
+<footer style="background:var(--surface);border-top:1px solid var(--border);margin-top:48px;padding:20px;">
+  <div class="footer-row" style="max-width:1200px;margin:0 auto;">
+    <p style="font-size:12px;color:var(--text-muted);margin:0;">© 2026 CareerBridge · Chrisland University Placement Portal</p>
+    <p style="font-size:12px;color:var(--text-faint);margin:0;">Developed by Derrick Amako</p>
+  </div>
+</footer>
+<script>
+  (function(){
+    var btn = document.getElementById('user-menu-btn');
+    var menu = document.getElementById('user-menu');
+    if (!btn || !menu) return;
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    });
+    menu.addEventListener('click', function(e){ e.stopPropagation(); });
+    document.addEventListener('click', function(){ menu.style.display = 'none'; });
+  })();
+  (function(){
+    var hbtn = document.getElementById('nav-hamburger-btn');
+    var navLinks = document.getElementById('nav-links');
+    if (!hbtn || !navLinks) return;
+    hbtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var open = navLinks.classList.toggle('open');
+      hbtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    navLinks.addEventListener('click', function(e){
+      e.stopPropagation();
+      if (e.target.closest('a')) {
+        navLinks.classList.remove('open');
+        hbtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('click', function(){
+      navLinks.classList.remove('open');
+      hbtn.setAttribute('aria-expanded', 'false');
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}{% block title %}Register · CareerBridge{% endblock %}
+{% block content %}
+<div style="max-width:600px;margin:60px auto;padding:0 20px;">
+  <h1 style="font-size:24px;font-weight:700;color:var(--text);text-align:center;margin:0 0 6px;">Join CareerBridge</h1>
+  <p class="t-body" style="text-align:center;margin-bottom:32px;">How are you joining?</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <a href="{% url 'register_student' %}" class="card card-glow" style="text-align:center;text-decoration:none;cursor:pointer;display:block;">
+      <div style="width:40px;height:40px;border-radius:6px;background:var(--accent-tint);border:1px solid var(--accent-border);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">{% include "icons/grad_cap.html" with size=20 %}</div>
+      <h2 style="font-weight:700;font-size:15px;color:var(--text);margin:0 0 6px;">I'm a Student</h2>
+      <p class="t-body">Find internships, get AI job matches, track applications.</p>
+    </a>
+    <a href="{% url 'register_employer' %}" class="card card-glow" style="text-align:center;text-decoration:none;cursor:pointer;display:block;">
+      <div style="width:40px;height:40px;border-radius:6px;background:var(--purple-tint);border:1px solid var(--purple-border);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">{% include "icons/building.html" with size=20 %}</div>
+      <h2 style="font-weight:700;font-size:15px;color:var(--text);margin:0 0 6px;">I'm an Employer</h2>
+      <p class="t-body">Post vacancies, review applications, find top student talent.</p>
+    </a>
+  </div>
+  <p style="text-align:center;margin-top:20px;font-size:13px;color:var(--text-muted);">Already have an account? <a href="{% url 'login' %}" style="color:var(--accent);font-weight:600;text-decoration:none;">Log in</a></p>
+</div>
+{% endblock %}

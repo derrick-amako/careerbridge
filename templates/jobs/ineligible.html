@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block title %}Not Available Yet · CareerBridge{% endblock %}
+{% block content %}
+<div style="max-width:480px;margin:80px auto;padding:0 20px;">
+  <div class="card" style="text-align:center;">
+    <p style="margin:0 0 12px;">{% include "icons/lock.html" with size=32 %}</p>
+    <h1 class="t-page-title" style="margin:0 0 10px;">Not available yet</h1>
+    <p class="t-body" style="margin:0 0 24px;">Internship applications open once you reach 300 level. Check back after you've progressed academically.</p>
+    <a href="{% url 'dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+  </div>
+</div>
+{% endblock %}

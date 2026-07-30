@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% block title %}Login · CareerBridge{% endblock %}
+{% block content %}
+<div style="max-width:420px;margin:60px auto;padding:0 20px;">
+  <div class="card">
+    <h1 class="t-page-title" style="margin:0 0 4px;">Welcome back</h1>
+    <p class="t-body" style="margin:0 0 24px;">Log in to your CareerBridge account</p>
+    <form method="post">
+      {% csrf_token %}
+      <div style="margin-bottom:18px;"><label class="label">Username or Email</label><input name="username" type="text" value="{{ identifier|default:'' }}" class="inp" placeholder="Your username or email" required></div>
+      <div style="margin-bottom:8px;"><label class="label">Password</label><input name="password" type="password" class="inp" placeholder="Your password" required></div>
+      <p style="text-align:right;margin:0 0 24px;"><a href="{% url 'password_reset' %}" style="font-size:12px;color:var(--accent);text-decoration:none;">Forgot password?</a></p>
+      <button type="submit" class="btn btn-primary" style="width:100%;text-align:center;">Log In</button>
+    </form>
+    <p style="text-align:center;margin-top:20px;font-size:13px;color:var(--text-muted);">No account? <a href="{% url 'register_choice' %}" style="color:var(--accent);font-weight:600;text-decoration:none;">Register here</a></p>
+  </div>
+</div>
+{% endblock %}

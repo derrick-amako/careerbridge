@@ -1,0 +1,15 @@
+{% if user.is_authenticated and user.is_employer and user.employer_profile.is_rejected %}
+<div id="verification-banner" style="background:var(--danger-tint);border-bottom:1px solid var(--danger-border);margin-bottom:16px;">
+  <div style="max-width:1200px;margin:0 auto;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;">
+    <p style="font-size:13px;color:var(--danger);margin:0;">Your account was not approved by Career Services. Please contact them or update your company details.</p>
+    <button type="button" onclick="document.getElementById('verification-banner').style.display='none'" aria-label="Dismiss" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:16px;line-height:1;flex-shrink:0;padding:2px;">×</button>
+  </div>
+</div>
+{% elif user.is_authenticated and user.is_employer and not user.employer_profile.is_verified %}
+<div id="verification-banner" style="background:var(--warning-tint);border-bottom:1px solid var(--warning-border);margin-bottom:16px;">
+  <div style="max-width:1200px;margin:0 auto;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;">
+    <p style="font-size:13px;color:var(--warning);margin:0;">⏳ Your account is pending verification by Career Services. Your job postings won't be visible to students until you're approved.</p>
+    <button type="button" onclick="document.getElementById('verification-banner').style.display='none'" aria-label="Dismiss" style="background:none;border:none;color:var(--warning);cursor:pointer;font-size:16px;line-height:1;flex-shrink:0;padding:2px;">×</button>
+  </div>
+</div>
+{% endif %}

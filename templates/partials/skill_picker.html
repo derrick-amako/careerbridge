@@ -1,0 +1,44 @@
+{# Reusable skill tag-picker. Context: field_name (form field name), initial (comma-separated existing value), skill_options (from view). #}
+<div id="skills-box" class="inp" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:46px;cursor:text;">
+  <input id="skill-entry" type="text" list="skill-suggestions" placeholder="Type a skill and press Enter" autocomplete="off" style="flex:1;min-width:160px;background:transparent;border:none;outline:none;color:var(--text);font-size:13px;padding:2px;">
+</div>
+<input type="hidden" name="{{ field_name|default:'skills' }}" id="skills-hidden" value="{{ initial|default:'' }}">
+{% include 'partials/skill_datalist.html' %}
+<script>
+  (function(){
+    var box = document.getElementById('skills-box');
+    var entry = document.getElementById('skill-entry');
+    var hidden = document.getElementById('skills-hidden');
+    var skills = hidden.value ? hidden.value.split(',').map(function(s){ return s.trim(); }).filter(Boolean) : [];
+    function render(){
+      box.querySelectorAll('.skill-chip').forEach(function(c){ c.remove(); });
+      skills.forEach(function(s, i){
+        var chip = document.createElement('span');
+        chip.className = 'skill-chip';
+        chip.style.display = 'inline-flex'; chip.style.alignItems = 'center'; chip.style.gap = '5px';
+        chip.textContent = s;
+        var x = document.createElement('span');
+        x.textContent = '×'; x.style.cursor = 'pointer'; x.style.fontWeight = '700';
+        x.addEventListener('click', function(ev){ ev.stopPropagation(); skills.splice(i,1); render(); });
+        chip.appendChild(x);
+        box.insertBefore(chip, entry);
+      });
+      hidden.value = skills.join(', ');
+    }
+    function addSkill(v){
+      v = v.trim().replace(/,$/, '');
+      if (v && skills.indexOf(v) === -1) { skills.push(v); render(); }
+      entry.value = '';
+    }
+    entry.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ',') {
+        e.preventDefault(); addSkill(entry.value);
+      } else if (e.key === 'Backspace' && !entry.value && skills.length) {
+        skills.pop(); render();
+      }
+    });
+    entry.addEventListener('blur', function(){ if (entry.value) addSkill(entry.value); });
+    box.addEventListener('click', function(){ entry.focus(); });
+    render();
+  })();
+</script>

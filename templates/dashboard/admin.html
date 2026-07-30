@@ -1,0 +1,114 @@
+{% extends 'base.html' %}{% block title %}Admin Analytics · CareerBridge{% endblock %}
+{% block content %}
+<div style="max-width:1200px;margin:0 auto;padding:32px 20px;">
+  <div style="margin-bottom:24px;"><h1 class="t-page-title">Career Services Analytics</h1><p class="t-body" style="margin-top:4px;">Platform-wide placement insights for Chrisland University</p></div>
+  <div class="stat-grid-6" style="margin-bottom:24px;">
+    <div class="card" style="text-align:center;padding:14px;"><p style="font-size:22px;font-weight:700;color:var(--accent);margin:0;">{{ total_students }}</p><p class="t-meta" style="margin-top:4px;">Students</p></div>
+    <div class="card" style="text-align:center;padding:14px;"><p style="font-size:22px;font-weight:700;color:var(--success);margin:0;">{{ total_employers }}</p><p class="t-meta" style="margin-top:4px;">Employers</p></div>
+    <div class="card" style="text-align:center;padding:14px;"><p style="font-size:22px;font-weight:700;color:var(--purple);margin:0;">{{ total_jobs }}</p><p class="t-meta" style="margin-top:4px;">Jobs Posted</p></div>
+    <div class="card" style="text-align:center;padding:14px;"><p style="font-size:22px;font-weight:700;color:var(--warning);margin:0;">{{ total_apps }}</p><p class="t-meta" style="margin-top:4px;">Applications</p></div>
+    <div class="card" style="text-align:center;padding:14px;"><p style="font-size:22px;font-weight:700;color:var(--teal);margin:0;">{{ placed }}</p><p class="t-meta" style="margin-top:4px;">Placed</p></div>
+    <div class="card" style="text-align:center;padding:14px;"><p style="font-size:22px;font-weight:700;color:var(--success);margin:0;">{{ placement_rate }}%</p><p class="t-meta" style="margin-top:4px;">Rate</p></div>
+  </div>
+  {% if pending_employers %}
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:16px;border-color:var(--warning-border);">
+    <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <h2 class="t-section-title">Pending Employer Verification</h2>
+      <span class="badge b-yellow">{{ pending_employers|length }} pending</span>
+    </div>
+    <div class="table-scroll">
+    <table class="dark-table">
+      <thead><tr><th>Company</th><th>Company Email</th><th>Website</th><th>Registered</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for emp in pending_employers %}
+        <tr>
+          <td style="font-weight:600;color:var(--text);">{{ emp.company_name }}</td>
+          <td style="color:var(--text-secondary);">{{ emp.company_email }}</td>
+          <td><a href="{{ emp.website }}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">{{ emp.website }}</a></td>
+          <td style="color:var(--text-muted);font-size:12px;">{{ emp.created_at|date:"d M Y" }}</td>
+          <td style="display:flex;gap:8px;">
+            <form method="post" action="{% url 'approve_employer' emp.pk %}" onsubmit="return confirm('Approve {{ emp.company_name|escapejs }}? Their job postings will become visible to students immediately.')">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn-sm">Approve</button>
+            </form>
+            <form method="post" action="{% url 'deny_employer' emp.pk %}" onsubmit="return confirm('Deny {{ emp.company_name|escapejs }}? Their account will remain but stay unverified.')">
+              {% csrf_token %}
+              <button type="submit" class="btn-danger" style="cursor:pointer;">Deny</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+  {% endif %}
+  {% if rejected_employers %}
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:16px;">
+    <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <h2 class="t-section-title">Rejected Employers</h2>
+      <span class="badge b-gray">{{ rejected_employers|length }} denied</span>
+    </div>
+    <div class="table-scroll">
+    <table class="dark-table">
+      <thead><tr><th>Company</th><th>Company Email</th><th>Website</th><th>Registered</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for emp in rejected_employers %}
+        <tr>
+          <td style="font-weight:600;color:var(--text);">{{ emp.company_name }}</td>
+          <td style="color:var(--text-secondary);">{{ emp.company_email }}</td>
+          <td><a href="{{ emp.website }}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;">{{ emp.website }}</a></td>
+          <td style="color:var(--text-muted);font-size:12px;">{{ emp.created_at|date:"d M Y" }}</td>
+          <td>
+            <form method="post" action="{% url 'approve_employer' emp.pk %}" onsubmit="return confirm('Reconsider and approve {{ emp.company_name|escapejs }}?')">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary btn-sm">Reconsider</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+  {% endif %}
+  <div class="two-col-grid" style="margin-bottom:16px;">
+    <div class="card"><h2 class="t-section-title" style="margin-bottom:16px;">Application Status</h2>
+      {% for item in status_data %}
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <span style="font-size:12px;color:var(--text-secondary);width:100px;text-transform:capitalize;">{{ item.status }}</span>
+        <div class="progress-track" style="flex:1;"><div class="progress-fill w-[{{ item.pct }}%]"></div></div>
+        <span style="font-size:12px;font-weight:700;color:var(--text);width:24px;text-align:right;">{{ item.count }}</span>
+      </div>
+      {% empty %}<p class="t-body">No data yet.</p>{% endfor %}
+    </div>
+    <div class="card"><h2 class="t-section-title" style="margin-bottom:16px;">Most Active Employers</h2>
+      {% for emp in top_employers %}
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border-subtle);">
+        <div><p style="font-size:13px;font-weight:600;color:var(--text);margin:0;">{{ emp.company_name }}</p><p class="t-meta" style="margin-top:2px;">{{ emp.industry }}</p></div>
+        <span class="badge b-blue">{{ emp.job_count }} jobs</span>
+      </div>
+      {% empty %}<p class="t-body">No employer data yet.</p>{% endfor %}
+    </div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:14px 20px;border-bottom:1px solid var(--border);"><h2 class="t-section-title">Recent Applications</h2></div>
+    <div class="table-scroll">
+    <table class="dark-table">
+      <thead><tr><th>Student</th><th>Job</th><th>Company</th><th>Date</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for app in recent_apps %}
+        <tr>
+          <td style="font-weight:600;color:var(--text);">{{ app.student.user.get_full_name }}</td>
+          <td>{{ app.job.title }}</td>
+          <td style="color:var(--text-secondary);">{{ app.job.employer.company_name }}</td>
+          <td style="color:var(--text-muted);font-size:12px;">{{ app.date_submitted|date:"d M Y" }}</td>
+          <td><span class="badge {% if app.status == 'submitted' %}b-slate{% elif app.status == 'shortlisted' %}b-green{% elif app.status == 'accepted' %}b-emerald{% else %}b-gray{% endif %}">{{ app.get_status_display }}</span></td>
+        </tr>
+        {% empty %}<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">No applications yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

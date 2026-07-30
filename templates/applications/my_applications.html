@@ -1,0 +1,52 @@
+{% extends 'base.html' %}{% block title %}My Applications · CareerBridge{% endblock %}
+{% block content %}
+<div style="max-width:900px;margin:0 auto;padding:32px 20px;">
+  <div style="margin-bottom:24px;">
+    <h1 class="t-page-title">My Applications</h1>
+  </div>
+  {% if applications %}
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    {% for app in applications %}
+    <div class="card card-glow">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+        <div style="flex:1;">
+          <h3 style="font-size:15px;font-weight:700;color:var(--text);margin:0 0 4px;">{{ app.job.title }}</h3>
+          <p style="font-size:13px;color:var(--accent);font-weight:600;margin:0 0 2px;">{{ app.job.employer.company_name }}</p>
+          <p class="t-meta" style="margin:0;">{{ app.job.get_job_type_display }} · Applied {{ app.date_submitted|date:"d M Y" }}</p>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <span class="badge {% if app.status == 'submitted' %}b-slate{% elif app.status == 'under_review' %}b-yellow{% elif app.status == 'shortlisted' %}b-green{% elif app.status == 'accepted' %}b-emerald{% else %}b-red{% endif %}" style="font-size:12px;padding:5px 12px;">{{ app.get_status_display }}</span>
+          <p class="t-meta" style="margin-top:8px;">Updated {{ app.updated_at|date:"d M Y" }}</p>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+        <p style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin:0 0 10px;">Status Timeline</p>
+        <div style="display:flex;flex-direction:column;">
+          {% for h in app.status_history.all %}
+          <div style="display:flex;gap:10px;">
+            <div style="display:flex;flex-direction:column;align-items:center;">
+              <span class="tl-dot {% if forloop.last %}{% if h.status == 'rejected' %}tl-dot-rejected{% else %}tl-dot-active{% endif %}{% endif %}"></span>
+              {% if not forloop.last %}<span class="tl-line"></span>{% endif %}
+            </div>
+            <div style="padding-bottom:16px;">
+              <p style="font-size:12px;font-weight:600;color:var(--text);margin:0;">{{ h.get_status_display }}</p>
+              <p class="t-meta" style="margin-top:2px;">{{ h.changed_at|date:"d M Y, H:i" }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+        <a href="{% url 'application_detail' app.pk %}" class="link-pill">View details & messages →</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="text-align:center;padding:80px 20px;" class="card">
+    <p style="font-size:16px;color:var(--text-muted);margin-bottom:16px;">No applications yet.</p>
+    <a href="{% url 'job_list' %}" class="btn btn-primary">Browse Jobs →</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}{% block title %}Employer Dashboard · CareerBridge{% endblock %}
+{% block content %}
+{% include 'partials/verification_banner.html' %}
+<div style="max-width:1200px;margin:0 auto;padding:32px 20px;">
+  <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:24px;">
+    <div><h1 class="t-page-title">{{ user.employer_profile.company_name }}</h1><p class="t-body" style="margin-top:4px;">{{ user.employer_profile.industry }} · Employer Dashboard</p></div>
+    <a href="{% url 'post_job' %}" class="btn btn-primary">+ Post a Job</a>
+  </div>
+  <div class="stat-grid-4" style="margin-bottom:24px;">
+    <div class="stat-card"><div style="width:40px;height:40px;border-radius:6px;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">{% include "icons/briefcase.html" with size=20 %}</div><div style="display:flex;flex-direction:column;justify-content:center;"><p style="font-size:30px;font-weight:800;color:var(--text);margin:0;line-height:1.1;">{{ stats.total_jobs }}</p><p class="t-meta">Jobs Posted</p></div></div>
+    <div class="stat-card"><div style="width:40px;height:40px;border-radius:6px;background:var(--success-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">{% include "icons/check.html" with size=20 %}</div><div style="display:flex;flex-direction:column;justify-content:center;"><p style="font-size:30px;font-weight:800;color:var(--text);margin:0;line-height:1.1;">{{ stats.open_jobs }}</p><p class="t-meta">Active Listings</p></div></div>
+    <div class="stat-card"><div style="width:40px;height:40px;border-radius:6px;background:var(--warning-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">{% include "icons/people.html" with size=20 %}</div><div style="display:flex;flex-direction:column;justify-content:center;"><p style="font-size:30px;font-weight:800;color:var(--text);margin:0;line-height:1.1;">{{ stats.total_apps }}</p><p class="t-meta">Applications</p></div></div>
+    <div class="stat-card"><div style="width:40px;height:40px;border-radius:6px;background:var(--purple-tint);display:flex;align-items:center;justify-content:center;flex-shrink:0;">{% include "icons/star.html" with size=20 %}</div><div style="display:flex;flex-direction:column;justify-content:center;"><p style="font-size:30px;font-weight:800;color:var(--text);margin:0;line-height:1.1;">{{ stats.shortlisted }}</p><p class="t-meta">Shortlisted</p></div></div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);">
+      <h2 class="t-section-title">Your Job Listings</h2>
+      <a href="{% url 'employer_applications' %}" class="link-pill">View all applications →</a>
+    </div>
+    {% if jobs %}
+    <div class="table-scroll">
+    <table class="dark-table">
+      <thead><tr><th>Job Title</th><th>Type</th><th>Applications</th><th>Deadline</th><th>Accepted</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for job in jobs %}
+        <tr>
+          <td style="font-weight:600;color:var(--text);">{{ job.title }}</td>
+          <td><span class="badge b-purple">{{ job.get_job_type_display }}</span></td>
+          <td><span class="badge b-blue">{{ job.app_count }}</span></td>
+          <td style="color:var(--text-secondary);font-size:12px;">{{ job.deadline }}</td>
+          <td><span class="badge {% if job.accepted_count %}b-emerald{% else %}b-gray{% endif %}">{{ job.accepted_count }}</span></td>
+          <td style="display:flex;gap:12px;align-items:center;">
+            <a href="{% url 'edit_job' job.pk %}" style="font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;">Edit</a>
+            <form method="post" action="{% url 'delete_job' job.pk %}" onsubmit="return confirm('Delete this job?')" style="display:inline;">{% csrf_token %}<button type="submit" class="btn-danger" style="cursor:pointer;">Delete</button></form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    {% else %}
+    <div style="text-align:center;padding:48px 20px;"><p class="t-body" style="margin-bottom:16px;">No jobs posted yet.</p><a href="{% url 'post_job' %}" class="btn btn-primary">Post Your First Job</a></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
