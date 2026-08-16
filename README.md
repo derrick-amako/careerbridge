@@ -3,7 +3,7 @@
 
 ---
 
-## ▶ How to Run (3 steps)
+##  How to Run (3 steps)
 
 ### Step 1: Install Python dependencies
 Open your terminal/command prompt and run:
@@ -25,7 +25,7 @@ That's it. The app is live.
 
 ---
 
-## 🔑 Demo Accounts (already loaded, ready to use)
+##  Demo Accounts (already loaded, ready to use)
 
 | Role | Username | Password |
 |------|----------|----------|
@@ -39,7 +39,7 @@ That's it. The app is live.
 
 ---
 
-## ✅ Features
+##  Features
 - Student registration, profile creation, CV upload
 - Employer registration and job posting
 - AI job matching (TF-IDF + Cosine Similarity via scikit-learn)
