@@ -1,5 +1,5 @@
 # CareerBridge - Student Internship & Job Placement Portal
-**Chrisland University, Abeokuta | Developer: Derrick Amako | Supervisor: Prof. Isaac Odun-Ayo**
+
 
 ---
 
