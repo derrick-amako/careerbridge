@@ -3,10 +3,6 @@
 A full-stack web portal that connects students with internships and jobs. It uses a content-based recommendation engine to rank jobs for each student and shows exactly which skills match and which are missing.
 
 
-![Dashboard](screenshots/dashboard.png)
-![Job match score](screenshots/match-score.png)
-![Mobile view](screenshots/mobile.png)
-
 ## Features
 
 - **Smart job matching:** TF-IDF vectorisation and cosine similarity (scikit-learn), combined with a weighted skill-overlap score. Each job shows a match score with matched and missing skills.
@@ -32,9 +28,6 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-Open http://127.0.0.1:8000
-
-## Demo Accounts (local demo data only)
 
 | Role | Username | Password |
 |------|----------|----------|
